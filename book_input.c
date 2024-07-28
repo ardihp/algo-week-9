@@ -21,7 +21,13 @@ int inputBuku()
     printf("Masukkan nama buku: ");
     fgets(book.nama_buku, 256, stdin);
     book.nama_buku[strcspn(book.nama_buku, "\n")] = 0;
-
+    
+    // Validate the length of the book name
+    if (strlen(book.nama_buku) > 100) {
+        printf("Nama buku terlalu panjang. Maksimal 100 karakter.\n");
+        return 1;
+    }
+    
     printf("Masukkan jenis buku: ");
     fgets(book.jenis_buku, 256, stdin);
     book.jenis_buku[strcspn(book.jenis_buku, "\n")] = 0;
