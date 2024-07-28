@@ -27,10 +27,15 @@ int main()
         printf("==        Pilihan Menu         ==\n");
         printf("=================================\n");
         printf("%s\n", ft_to_string(menuTable));
-        printf("Masukan pilihan menu (1 ~ 7): ");
-        scanf("%d", &menu);
+        while (1) {
+            printf("Masukan pilihan menu (1 ~ 7): ");
+            scanf("%d", &menu);
+            getchar();  
+
+            if (menu >= 1 && menu <= 7) break;
+            printf("Pilihan tidak valid, silakan coba lagi.\n");
+        }
         printf("=================================\n\n");
-        getchar();
 
         switch (menu)
         {
