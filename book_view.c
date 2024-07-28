@@ -5,7 +5,6 @@
 #include "book.h"
 #include "book_struct.h"
 
-
 Books getAllBooks()
 {
     FILE *list_buku;
@@ -28,7 +27,8 @@ Books getAllBooks()
         {
             // printf("row: %s\n", row);
             // printf("strlen: %ld\n", strlen(row));
-            if(row == NULL || strlen(row) == 0){
+            if (row == NULL || strlen(row) == 0)
+            {
                 continue;
             }
             Book book;
@@ -53,14 +53,11 @@ Books getAllBooks()
     return books;
 }
 
-
 Book getBukuByKodeBuku(const char *input_kode_buku)
 {
-  
     Books books = getAllBooks();
     Book book;
     book.id = -1;
-   
 
     for (int i = 0; i < books.total_data; i++)
     {
@@ -74,24 +71,19 @@ Book getBukuByKodeBuku(const char *input_kode_buku)
     return book;
 }
 
-
-
-
 int viewBuku()
 {
     /* Setup Table */
     ft_table_t *table = ft_create_table();
     ft_set_cell_prop(table, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
-    ft_write_ln(table, "#", "Book Code", "Book Name", "Book Category", "Price", "Stock");
+    ft_write_ln(table, "Index", "Book Code", "Book Name", "Book Category", "Price", "Stock");
 
     char row[1000];
 
     int jumlah_buku = 0;
     int ch;
 
-    printf("=================================\n");
-
-
+    printf("===================================\n");
 
     Books books = getAllBooks();
 
@@ -101,6 +93,9 @@ int viewBuku()
 
     for (int i = 0; i < totalBooks; i++)
     {
+        char index_book[3];
+        sprintf(index_book, "%d", i + 1);
+
         Book book = books.data[i];
         char book_id_str[100];
         sprintf(book_id_str, "%d", book.id);
@@ -109,18 +104,17 @@ int viewBuku()
         char book_qty_str[100];
         sprintf(book_qty_str, "%d", book.jumlah_buku);
 
-        ft_write_ln(table, book_id_str, book.kode_buku, book.nama_buku, book.jenis_buku, book_price_str, book_qty_str);
+        ft_write_ln(table, index_book, book.kode_buku, book.nama_buku, book.jenis_buku, book_price_str, book_qty_str);
     }
 
     if (totalBooks < 1)
     {
-            printf("Tidak ada buku yang tersedia\n\n");
+        printf("Tidak ada buku yang tersedia\n\n");
     }
     else
     {
-            printf("%s\n", ft_to_string(table));  
+        printf("%s\n", ft_to_string(table));
     }
 
     ft_destroy_table(table);
-
 }

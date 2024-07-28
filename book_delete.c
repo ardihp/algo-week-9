@@ -13,70 +13,71 @@ int deleteBuku()
 
     Books books = getAllBooks();
 
-    printf("=================================\n");
     viewBuku();
-    printf("=================================\n");
-    printf("Masukkan kode buku yang ingin dihapus: ");
+    printf("===================================\n");
 
-    int isInputValid = 0;
+    list_buku = fopen(BOOK_DB_FILE, "r");
 
-    char kode_buku[256];
-    scanf("%s", kode_buku);
-
-    Book book = getBukuByKodeBuku(kode_buku);
-
-    if(book.id == -1){
-        printf("Buku tidak ditemukan\n");
-    }else{
-        isInputValid = 1;
-    }
-    while (!isInputValid)
+    if (list_buku == NULL)
     {
-        printf("Buku dengan kode '%s' tidak ditemukan\n", kode_buku);
-        printf("Masukkan kode buku yang ingin dihapus: ");
-        scanf("%s", kode_buku);
-        book = getBukuByKodeBuku(kode_buku);
-        if(book.id != -1){
-            isInputValid = 1;
+        perror("Gagal membuka file data buku");
+        return 1;
+    }
+    else
+    {
+
+        while (fgets(combine, 1000, list_buku))
+        {
+            jumlah_buku++;
         }
+        printf("Jumlah buku yang tersedia: %d buah\n", jumlah_buku);
+
+        do
+        {
+            printf("Masukan index buku yang mau kamu hapus (1 ~ %d): ", jumlah_buku);
+            scanf("%d", &index_buku);
+
+            if (index_buku < 1 || index_buku > jumlah_buku)
+            {
+                printf("Harap masukan index buku antara (1 ~ %d)\n", jumlah_buku);
+            }
+
+        } while (index_buku < 1 || index_buku > jumlah_buku);
+
+        fclose(list_buku);
     }
 
     char confirm_input;
     printf("Apakah anda yakin ingin menghapus buku ini? (y/n): ");
     scanf(" %c", &confirm_input);
 
-    if(confirm_input == 'y'){
+    if (confirm_input == 'y')
+    {
         list_buku = fopen(BOOK_DB_FILE, "r");
         temp_list = fopen(BOOK_DB_TEMP_FILE, "w");
 
         if (list_buku == NULL)
         {
-            perror("Gagal membuka file databuku.txt");
+            perror("Gagal membuka file data buku");
             return 1;
         }
 
         if (temp_list == NULL)
         {
-            perror("Gagal membuka file temp.txt");
+            perror("Gagal membuka file temp buku");
             fclose(list_buku);
             return 1;
         }
 
+        int list_index = 1;
         while (fgets(combine, 1000, list_buku))
         {
-            char current_combine[1000];
-            strcpy(current_combine, combine);
-            
-            strtok(current_combine, ",");
-            char current_kode_buku[256];
-            strcpy(current_kode_buku, strtok(NULL, ","));
-
-            // printf("current_kode_buku: %s\n", current_kode_buku);
-
-            if (strcmp(book.kode_buku, current_kode_buku) != 0)
+            if (list_index != index_buku)
             {
                 fputs(combine, temp_list);
             }
+
+            list_index++;
         }
 
         fclose(list_buku);
@@ -85,9 +86,11 @@ int deleteBuku()
         remove(BOOK_DB_FILE);
         rename(BOOK_DB_TEMP_FILE, BOOK_DB_FILE);
 
-        printf("Buku berhasil dihapus\n");
+        printf("Data Successfully delete..\n");
         viewBuku();
-    }else{
-        printf("Batal menghapus buku\n");
+    }
+    else
+    {
+        printf("Delete canceled..\n");
     }
 }

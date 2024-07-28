@@ -23,9 +23,9 @@ int main()
 
     while (1)
     {
-        printf("=================================\n");
-        printf("==        Pilihan Menu         ==\n");
-        printf("=================================\n");
+        printf("===================================\n");
+        printf("==          Pilihan Menu         ==\n");
+        printf("===================================\n");
         printf("%s\n", ft_to_string(menuTable));
         while (1) {
             printf("Masukan pilihan menu (1 ~ 7): ");
@@ -35,7 +35,7 @@ int main()
             if (menu >= 1 && menu <= 7) break;
             printf("Pilihan tidak valid, silakan coba lagi.\n");
         }
-        printf("=================================\n\n");
+        printf("===================================\n\n");
 
         switch (menu)
         {

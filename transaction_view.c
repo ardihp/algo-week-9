@@ -5,9 +5,8 @@
 #include "transaction.h"
 #include "transaction_struct.h"
 
-
-
-BookSaleTransactionList getAllTransactions(){
+BookSaleTransactionList getAllTransactions()
+{
     FILE *TransactionDBConnection;
     char row[1000];
     BookSaleTransactionList bookTransactionList;
@@ -46,8 +45,8 @@ BookSaleTransactionList getAllTransactions(){
     return bookTransactionList;
 }
 
-
-BookSaleTransaction getTransactionById(char* transactionCode){
+BookSaleTransaction getTransactionById(char *transactionCode)
+{
     FILE *TransactionDBConnection;
     char row[1000];
     BookSaleTransaction bookTransaction;
@@ -64,7 +63,8 @@ BookSaleTransaction getTransactionById(char* transactionCode){
         while (fgets(row, 1000, TransactionDBConnection))
         {
             char *token = strtok(row, ",");
-            if(strcmp(token, transactionCode) == 0){
+            if (strcmp(token, transactionCode) == 0)
+            {
                 bookTransaction.trx_id = atoi(token);
                 strcpy(bookTransaction.buyer_name, strtok(NULL, ","));
                 strcpy(bookTransaction.book_id, strtok(NULL, ","));
@@ -83,29 +83,28 @@ BookSaleTransaction getTransactionById(char* transactionCode){
     return bookTransaction;
 }
 
-
-
-
-
 int viewAllTransactions()
 {
-      /* Setup Table */
+    /* Setup Table */
     ft_table_t *table = ft_create_table();
     ft_set_cell_prop(table, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
-    ft_write_ln(table, "TRX ID", "Buyer Name", "Book ID", "Book Name", "Book Category", "Price", "Qty", "Value");
+    ft_write_ln(table, "Index", "TRX ID", "Buyer Name", "Book ID", "Book Name", "Book Category", "Price", "Qty", "Value");
 
-
-    char row[1000];   
+    char row[1000];
     int totalTransaction = 0;
     int ch;
 
     printf("Menampilkan semua data transaksi\n");
-    printf("=================================\n");
+    printf("===================================\n");
 
     BookSaleTransactionList bookTransactionList = getAllTransactions();
     totalTransaction = bookTransactionList.total_transaction;
 
-    for(int i = 0; i < totalTransaction; i++){
+    for (int i = 0; i < totalTransaction; i++)
+    {
+        char index_transaction[3];
+        sprintf(index_transaction, "%d", i + 1);
+
         BookSaleTransaction bookTransaction = bookTransactionList.data[i];
         char trx_id_str[100];
         sprintf(trx_id_str, "%d", bookTransaction.trx_id);
@@ -116,16 +115,16 @@ int viewAllTransactions()
         char value_str[100];
         sprintf(value_str, "%f", bookTransaction.value);
 
-        ft_write_ln(table, trx_id_str, bookTransaction.buyer_name, bookTransaction.book_id, bookTransaction.book_name, bookTransaction.book_category, book_price_str, book_qty_str, value_str);
+        ft_write_ln(table, index_transaction, trx_id_str, bookTransaction.buyer_name, bookTransaction.book_id, bookTransaction.book_name, bookTransaction.book_category, book_price_str, book_qty_str, value_str);
     }
-
 
     if (totalTransaction < 1)
     {
-            printf("Tidak ada data transaksi yang tersedia\n");
-    } else
+        printf("Tidak ada data transaksi yang tersedia\n");
+    }
+    else
     {
-            printf("%s\n", ft_to_string(table));  
+        printf("%s\n", ft_to_string(table));
     }
     ft_destroy_table(table);
     printf("\n");

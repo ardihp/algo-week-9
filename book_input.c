@@ -19,7 +19,7 @@ int inputBuku()
     
     srand(time(0));
 
-    printf("=================================\n");
+    printf("===================================\n");
     printf("Masukkan nama buku: ");
     fgets(book.nama_buku, 256, stdin);
     book.nama_buku[strcspn(book.nama_buku, "\n")] = 0;
@@ -38,7 +38,7 @@ int inputBuku()
 
     if (list_buku == NULL)
     {
-        perror("Gagal membuka file databuku.txt");
+        perror("Gagal membuka file data buku");
         return 1;
     }
     else

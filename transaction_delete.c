@@ -6,61 +6,57 @@
 
 int deleteTransaction()
 {
-    FILE *list_buku;
+    FILE *list_transaction;
     FILE *temp_list;
     char combine[1000], ch;
-    int jumlah_buku = 0, index_buku;
+    int jumlah_transaksi = 0, index_transaksi;
 
     BookSaleTransactionList books = getAllTransactions();
 
-    printf("=================================\n");
     viewAllTransactions();
-    printf("=================================\n");
+    printf("===================================\n");
 
-    int isInputValid = 0;
+    list_transaction = fopen(TRX_DB_FILE, "r");
 
-    printf("Masukkan kode transaksi yang ingin dihapus: ");
-    char trx_code[256];
-    scanf("%s", trx_code);
-
-
-    BookSaleTransaction bookTransaction = getTransactionById(trx_code);
-    if(bookTransaction.trx_id == -1){
-        printf("Transaksi tidak ditemukan\n");
-        
-    }else{
-        isInputValid = 1;
-    }
-    while (!isInputValid)
+    if (list_transaction == NULL)
     {
-        printf("Transaksi dengan kode '%s' tidak ditemukan\n", trx_code);
-        printf("Masukkan kode transaksi yang ingin dihapus: ");
-        scanf("%s", trx_code);
-        bookTransaction = getTransactionById(trx_code);
-        if(bookTransaction.trx_id != -1){
-            isInputValid = 1;
-        }
-        
+        perror("Gagal membuka file data transaksi");
+        return 1;
     }
-    
+    else
+    {
 
-    
-    
-  
+        while (fgets(combine, 1000, list_transaction))
+        {
+            jumlah_transaksi++;
+        }
+        printf("Jumlah transaksi yang tersedia: %d buah\n", jumlah_transaksi);
 
- 
+        do
+        {
+            printf("Masukan index transaksi yang mau kamu hapus (1 ~ %d): ", jumlah_transaksi);
+            scanf("%d", &index_transaksi);
 
-    
+            if (index_transaksi < 1 || index_transaksi > jumlah_transaksi)
+            {
+                printf("Harap masukan index transaksi antara (1 ~ %d)\n", jumlah_transaksi);
+            }
+
+        } while (index_transaksi < 1 || index_transaksi > jumlah_transaksi);
+
+        fclose(list_transaction);
+    }
 
     char confirm_input;
     printf("Apakah anda yakin ingin menghapus transaksi ini? (y/n): ");
     scanf(" %c", &confirm_input);
 
-    if(confirm_input == 'y'){
-        list_buku = fopen(TRX_DB_FILE, "r");
+    if (confirm_input == 'y')
+    {
+        list_transaction = fopen(TRX_DB_FILE, "r");
         temp_list = fopen(TRX_DB_TEMP_FILE, "w");
 
-        if (list_buku == NULL)
+        if (list_transaction == NULL)
         {
             perror("Gagal membuka file data transaksi");
             return 1;
@@ -69,38 +65,32 @@ int deleteTransaction()
         if (temp_list == NULL)
         {
             perror("Gagal membuka file temp transaksi");
-            fclose(list_buku);
+            fclose(list_transaction);
             return 1;
         }
 
-        while (fgets(combine, 1000, list_buku))
+        int list_index = 1;
+        while (fgets(combine, 1000, list_transaction))
         {
-            char current_combine[1000];
-            strcpy(current_combine, combine);
-            
-            
-            char currentTrxId[256];
-            strcpy(currentTrxId, strtok(current_combine, ","));
-
-            int trx_id = atoi(currentTrxId);
-         
-
-
-            if (bookTransaction.trx_id != trx_id)
+            if (list_index != index_transaksi)
             {
                 fputs(combine, temp_list);
             }
+
+            list_index++;
         }
 
-        fclose(list_buku);
+        fclose(list_transaction);
         fclose(temp_list);
 
         remove(TRX_DB_FILE);
         rename(TRX_DB_TEMP_FILE, TRX_DB_FILE);
 
-        printf("Transaksi berhasil dihapus\n");
+        printf("Data Successfully delete..\n");
         viewAllTransactions();
-    }else{
-        printf("Batal menghapus Transaksi\n");
+    }
+    else
+    {
+        printf("Delete canceled..\n");
     }
 }

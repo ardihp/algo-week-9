@@ -6,6 +6,8 @@
     "book_struct.h": "c",
     "string.h": "c",
     "stdlib.h": "c",
-    "transaction_struct.h": "c"
+    "transaction_struct.h": "c",
+    "stdio.h": "c",
+    "fort.h": "c"
   }
 }

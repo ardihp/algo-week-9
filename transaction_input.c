@@ -42,7 +42,7 @@ int inputBookTransaction()
     BookSaleTransaction bookTrx;
     srand(time(0));
 
-    printf("=================================\n");
+    printf("===================================\n");
     printf("Masukkan nama pembeli: ");
     
     char buyer_name[100];
