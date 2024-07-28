@@ -7,7 +7,6 @@ int main()
 {
     /* Table Configuration */
     ft_table_t *menuTable = ft_create_table();
-    ft_set_border_style(menuTable, FT_DOUBLE2_STYLE);
     ft_set_cell_prop(menuTable, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
     ft_write_ln(menuTable, "Code", "Menu Name");
 
