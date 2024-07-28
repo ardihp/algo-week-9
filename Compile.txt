@@ -1,3 +1,3 @@
 Command to compile:
 
-gcc book_delete.c book_input.c  book_struct.c book_struct.h book_view.c  book.h transaction_input.c transaction_struct.c transaction_struct.h transaction_view.c transaction.h main.c lib/fort.c lib/fort.h transaction_delete.c -o main && ./main
+gcc book_delete.c book_input.c  book_struct.c book_struct.h book_view.c  book.h transaction_input.c transaction_struct.c transaction_struct.h transaction_view.c transaction.h color_output.c main.c lib/fort.c lib/fort.h transaction_delete.c -o main && ./main

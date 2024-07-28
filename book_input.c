@@ -5,18 +5,16 @@
 #include <ctype.h>
 #include "book.h"
 #include "book_struct.h"
+#include "color_output.c"
 
-
-
-
-Book createBook(int id, const char* kode_buku, const char* nama_buku, const char* jenis_buku, int harga_buku, int jumlah_buku);
+Book createBook(int id, const char *kode_buku, const char *nama_buku, const char *jenis_buku, int harga_buku, int jumlah_buku);
 
 int inputBuku()
 {
     FILE *list_buku;
 
     Book book;
-    
+
     srand(time(0));
 
     printf("===================================\n");
@@ -49,12 +47,12 @@ int inputBuku()
 
         snprintf(book.kode_buku + 1, sizeof(book.kode_buku) - 1, "%d", random_number);
 
-
         // Save to File with CSV Format
         fprintf(list_buku, "%d,%s,%s,%s,%d,%d\n", book.id, book.kode_buku, book.nama_buku, book.jenis_buku, book.harga_buku, book.jumlah_buku);
-    
+
         fclose(list_buku);
 
-        printf("Data successfully create..\n\n");
+        printf(ANSI_COLOR_GREEN ANSI_STYLE_BOLD "Data successfully create..\n\n" ANSI_RESET_ALL);
+        printf(ANSI_COLOR_GREEN ANSI_STYLE_BOLD "Sering-sering dateng lagi yeee!!\n" ANSI_RESET_ALL);
     }
 }
