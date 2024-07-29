@@ -28,6 +28,50 @@ BookCategory getBookCategory(const char* category_str) {
     }
 }
 
+
+void updateBook(Book book){
+    FILE *list_buku;
+    FILE *list_buku_temp;
+
+    list_buku = fopen(BOOK_DB_FILE, "r");
+    list_buku_temp = fopen(BOOK_DB_TEMP_FILE, "w");
+
+    if (list_buku == NULL || list_buku_temp == NULL)
+    {
+        perror("Gagal membuka file data buku");
+        return;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), list_buku))
+    {
+        char kode_buku[256];
+        char nama_buku[256];
+        char jenis_buku[256];
+        int harga_buku;
+        int jumlah_buku;
+
+        sscanf(line, "%d,%[^,],%[^,],%[^,],%d,%d", &book.id, kode_buku, nama_buku, jenis_buku, &harga_buku, &jumlah_buku);
+
+        if (strcmp(kode_buku, book.kode_buku) == 0)
+        {
+            fprintf(list_buku_temp, "%d,%s,%s,%s,%d,%d\n", book.id, book.kode_buku, book.nama_buku, book.jenis_buku, book.harga_buku, book.jumlah_buku);
+        }
+        else
+        {
+            fprintf(list_buku_temp, "%d,%s,%s,%s,%d,%d\n", book.id, kode_buku, nama_buku, jenis_buku, harga_buku, jumlah_buku);
+        }
+    }
+
+    fclose(list_buku);
+    fclose(list_buku_temp);
+
+    remove(BOOK_DB_FILE);
+    rename(BOOK_DB_TEMP_FILE, BOOK_DB_FILE);
+    
+}
+
+
 void toLowerCase(char *str) {
     for (int i = 0; str[i]; i++) {
         str[i] = tolower((unsigned char) str[i]);

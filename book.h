@@ -13,4 +13,6 @@ Book getBukuByKodeBuku(const char *kode_buku);
 
 Books getAllBooks(void);
 
+void updateBook(Book book);
+
 #endif

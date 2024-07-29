@@ -54,26 +54,59 @@ int inputBookTransaction()
     fgets(book_id, sizeof(book_id), stdin);
     book_id[strcspn(book_id, "\n")] = 0;
 
+
+    int isBookExist = 0;
+    Book book = getBukuByKodeBuku(book_id);
+    if(book.id != -1){
+        isBookExist = 1;
+    }
+
+    while (isBookExist == 0)
+    {
+        printf("Buku dengan kode buku %s tidak ditemukan\n", book_id);
+        printf("Masukkan ID buku: ");
+        fgets(book_id, sizeof(book_id), stdin);
+        book_id[strcspn(book_id, "\n")] = 0;
+
+        book = getBukuByKodeBuku(book_id);
+        if(book.id != -1){
+            isBookExist = 1;
+        }
+    }
+
+
     printf("Masukkan Jumlah buku: ");
     char book_qty[50];
     fgets(book_qty, sizeof(book_qty), stdin);
 
 
-    Book book = getBukuByKodeBuku(book_id);
-    if (book.id == -1)
-    {
-        printf("Buku dengan kode buku %s tidak ditemukan\n", book_id);
-        return 1;
+    int isQtyValid = 0;
+    if(atoi(book_qty) <= book.jumlah_buku){
+            isQtyValid = 1;
     }
 
-    printf("Book ID: %d\n", book.id);
+    while (isQtyValid == 0)
+    {
+        printf("Jumlah buku yang dimasukkan tidak valid\n");
+        printf("Masukkan Jumlah buku: ");
+        fgets(book_qty, sizeof(book_qty), stdin);
 
-
+      
+        if(atoi(book_qty) <= book.jumlah_buku){
+                isQtyValid = 1;
+        }
+        
+    }
 
 
     float totalValue = getTotalTransactionValue(atoi(book_qty), book.harga_buku);
     transaction_db = openTransactionDB();
     bookTrx = createBookTransaction(rand(), buyer_name, book_id, book.nama_buku, book.jenis_buku, book.harga_buku, atoi(book_qty), totalValue);
+
+    // kurangin stock buku
+    book.jumlah_buku -= atoi(book_qty);
+    updateBook(book);
+
 
     fprintf(transaction_db, "%d,%s,%s,%s,%s,%d,%d,%f\n", bookTrx.trx_id, bookTrx.buyer_name, bookTrx.book_id, bookTrx.book_name, bookTrx.book_category, bookTrx.book_price, bookTrx.book_qty, bookTrx.value);
 
